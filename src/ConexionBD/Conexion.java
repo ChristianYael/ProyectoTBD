@@ -9,5 +9,5 @@ package ConexionBD;
  * @author Player
  */
 public class Conexion {
-    int a = 1;
+
 }
