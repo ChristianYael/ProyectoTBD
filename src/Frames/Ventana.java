@@ -84,6 +84,49 @@ private DefaultTableModel m;
         txtVeterinario.setText("");
         txtFiltrar.setText("");
     }
+    private void filtrar(){
+        StringBuilder sql = new StringBuilder("SELECT * FROM animales WHERE 1=1");
+        
+        String busquedaGeneral = txtFiltrar.getText().trim();
+
+        String nombre = txtNombre.getText().trim();  
+        String especie = txtEspecie.getText().trim(); 
+        String sexo = txtSexo.getText().trim();    
+        String estado = txtEstado.getText().trim();  
+
+        if(!busquedaGeneral.isEmpty()){
+            sql.append(" AND (nombre LIKE '%").append(busquedaGeneral).append("%' OR especie LIKE '%").append(busquedaGeneral).append("%')");
+        }
+
+        if (!nombre.isEmpty()) sql.append(" AND nombre LIKE '%").append(nombre).append("%'");
+        if (!especie.isEmpty()) sql.append(" AND especie LIKE '%").append(especie).append("%'");
+        if (!sexo.isEmpty()) sql.append(" AND sexo LIKE '%").append(sexo).append("%'");
+        if (!estado.isEmpty()) sql.append(" AND estado LIKE '%").append(estado).append("%'");
+
+        try {
+            DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
+            m.setRowCount(0);
+
+            Statement st = Conexion.con.createStatement();
+            ResultSet r = st.executeQuery(sql.toString());
+
+            while (r.next()) {
+                Object A[] = new Object[8];
+                A[0] = r.getString("NOMBRE");
+                A[1] = r.getInt("EDAD");
+                A[2] = r.getString("SEXO");
+                A[3] = r.getString("ESTADO");
+                A[4] = r.getString("ESPECIE");
+                A[5] = r.getString("VETERINARIO");
+                A[6] = r.getString("HABITAD");
+                A[7] = r.getString("ALIMENTACION");
+                m.addRow(A);
+            }
+
+        } catch (SQLException ex) {
+            System.out.println("Error al filtrar: " + ex.getMessage());
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -192,6 +235,11 @@ private DefaultTableModel m;
         txtFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtFiltrarActionPerformed(evt);
+            }
+        });
+        txtFiltrar.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtFiltrarKeyReleased(evt);
             }
         });
         jPanel1.add(txtFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 280, 260, 40));
@@ -376,7 +424,7 @@ private DefaultTableModel m;
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltrarActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtFiltrarActionPerformed
 
     private void txtHabitatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHabitatActionPerformed
@@ -412,62 +460,7 @@ private DefaultTableModel m;
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
-    
-    StringBuilder sql = new StringBuilder("SELECT * FROM animales WHERE 1=1");
-    ArrayList<Object> parametros = new ArrayList<>();
-
-    String nombre = txtNombre.getText().trim();  
-    String especie = txtEspecie.getText().trim(); 
-    String sexo = txtSexo.getText().trim();    
-    String estado = txtEstado.getText().trim();  
-
-    // 3. Construcción dinámica del Query
-    if (!nombre.isEmpty()) {
-        sql.append(" AND nombre LIKE ?");
-        parametros.add("%" + nombre + "%");
-    }
-    if (!especie.isEmpty()) {
-        sql.append(" AND especie LIKE ?");
-        parametros.add("%" + especie + "%");
-    }
-    if (!sexo.isEmpty()) {
-        sql.append(" AND sexo LIKE ?");
-        parametros.add("%" + sexo + "%");
-    }
-    if (!estado.isEmpty()) {
-        sql.append(" AND estado LIKE ?");
-        parametros.add("%" + estado + "%");
-    }
-
-    try {
-        for (int i = m.getRowCount() - 1; i >= 0; i--) {
-            m.removeRow(i);
-        }
-
-        PreparedStatement pst = Conexion.con.prepareStatement(sql.toString());
         
-        for (int i = 0; i < parametros.size(); i++) {
-            pst.setObject(i + 1, parametros.get(i));
-        }
-
-        ResultSet r = pst.executeQuery();
-
-        while (r.next()) {
-            Object A[] = new Object[8];
-            A[0] = r.getString("NOMBRE");
-            A[1] = r.getInt("EDAD");
-            A[2] = r.getString("SEXO");
-            A[3] = r.getString("ESTADO");
-            A[4] = r.getString("ESPECIE");
-            A[5] = r.getString("VETERINARIO");
-            A[6] = r.getString("HABITAD");
-            A[7] = r.getString("ALIMENTACION");
-            m.addRow(A);
-        }
-
-    } catch (SQLException ex) {
-        System.out.println("Error Filtro Dinámico: " + ex.getMessage());
-    }
     }//GEN-LAST:event_btnFiltrarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
@@ -527,6 +520,10 @@ private DefaultTableModel m;
     private void txtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSexoActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtSexoActionPerformed
+
+    private void txtFiltrarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltrarKeyReleased
+        filtrar();
+    }//GEN-LAST:event_txtFiltrarKeyReleased
 
     /**
      * @param args the command line arguments
