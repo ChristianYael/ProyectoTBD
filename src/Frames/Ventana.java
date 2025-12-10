@@ -4,6 +4,7 @@
  */
 package Frames;
 
+import Clases.SQL;
 import ConexionBD.Conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -18,22 +19,21 @@ private DefaultTableModel m;
         Conexion.getConnection();
         this.setLocationRelativeTo(null);
         m = (DefaultTableModel) Tabla.getModel();
-        
+        String[] nombresColumnas = {"NOMBRE", "EDAD", "SEXO", "ESTADO", "ESPECIE", "VETERINARIO", "HABITAD","ALIMENTACION"};
+        m.setColumnIdentifiers(nombresColumnas);
+        Tabla.setModel(m);
         llenarTabla();
     }
     public void llenarTabla(){
         try {
+            for (int i = m.getRowCount() - 1; i >= 0; i--) {
+            m.removeRow(i);
+            }
             stm = Conexion.con.createStatement();
-            String sql = "select a.Nombre as NOMBRE,a.Edad AS EDAD,a.Sexo AS SEXO\n" +
-            ",a.Estado AS ESTADO,e.NombreComun AS ESPECIE,ci.Nombre AS VETERINARIO,h.NombreHabitat AS HABITAD\n" +
-            "from Animales a\n" +
-            "inner join Especies e on e.IDEspecie=a.IDEspecie\n" +
-            "inner join AtencionVeterinaria c on c.IDAnimal=a.IDAnimal\n" +
-            "inner join Empleados ci on ci.IDEmpleado=c.IDEmpleado\n" +
-            "inner join Habitats h on h.IDHabitat=a.IDHabitat";
+            String sql = SQL.LlenarTabla;
             ResultSet r = stm.executeQuery(sql);
             while(r.next()){
-                Object A[] = new Object[7];
+                Object A[] = new Object[8];
                 A[0] = r.getString("NOMBRE");
                 A[1] = r.getInt("EDAD");
                 A[2] = r.getString("SEXO");
@@ -41,6 +41,7 @@ private DefaultTableModel m;
                 A[4] = r.getString("ESPECIE");
                 A[5] = r.getString("VETERINARIO");
                 A[6] = r.getString("HABITAD");
+                A[7] = r.getString("ALIMENTACION");
                 m.addRow(A);
             }
         } catch (SQLException ex) {
@@ -136,7 +137,7 @@ private DefaultTableModel m;
         jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 70, -1, 30));
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jLabel6.setText("Cuidador");
+        jLabel6.setText("Alimento");
         jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 30, -1, 30));
 
         jLabel7.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
