@@ -4,15 +4,10 @@
  */
 package Frames;
 
-/**
- *
- * @author Tadeo Nuñez
- */
+import ConexionBD.Conexion;
+
 public class Ventana extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Ventana
-     */
     public Ventana() {
         initComponents();
         this.setLocationRelativeTo(null);
