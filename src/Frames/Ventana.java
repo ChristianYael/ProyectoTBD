@@ -34,15 +34,14 @@ private DefaultTableModel m;
             public void mouseClicked(MouseEvent e){
                 int i = Tabla.getSelectedRow();
                 if(i >=0){
-                    txtNombre.setText("");
-                txtSexo.setText(Tabla.getValueAt(i,0).toString());
-                txtEdad.setText(Tabla.getValueAt(i,1).toString());
-                txtEspecie.setText(Tabla.getValueAt(i,2).toString());
-                txtHabitat.setText(Tabla.getValueAt(i,3).toString());
-                txtEstado.setText(Tabla.getValueAt(i,4).toString());
-                txtAlimento.setText(Tabla.getValueAt(i,5).toString());
-                txtVeterinario.setText(Tabla.getValueAt(i,6).toString());
-                txtFiltrar.setText(Tabla.getValueAt(i,7).toString());
+                    txtNombre.setText(Tabla.getValueAt(i,0).toString());
+                    txtEdad.setText(Tabla.getValueAt(i,1).toString());
+                    txtSexo.setText(Tabla.getValueAt(i,2).toString());
+                    txtEstado.setText(Tabla.getValueAt(i,3).toString());
+                    txtEspecie.setText(Tabla.getValueAt(i,4).toString());
+                    txtHabitat.setText(Tabla.getValueAt(i,5).toString());
+                    txtVeterinario.setText(Tabla.getValueAt(i,6).toString());
+                    txtAlimento.setText(Tabla.getValueAt(i,7).toString());
                 }
             }
         });
