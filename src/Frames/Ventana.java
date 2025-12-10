@@ -18,19 +18,29 @@ private DefaultTableModel m;
         Conexion.getConnection();
         this.setLocationRelativeTo(null);
         m = (DefaultTableModel) Tabla.getModel();
+        
         llenarTabla();
     }
     public void llenarTabla(){
         try {
             stm = Conexion.con.createStatement();
-            String sql = "SELECT * FROM ARTICULO";
+            String sql = "select a.Nombre as NOMBRE,a.Edad AS EDAD,a.Sexo AS SEXO\n" +
+            ",a.Estado AS ESTADO,e.NombreComun AS ESPECIE,ci.Nombre AS VETERINARIO,h.NombreHabitat AS HABITAD\n" +
+            "from Animales a\n" +
+            "inner join Especies e on e.IDEspecie=a.IDEspecie\n" +
+            "inner join AtencionVeterinaria c on c.IDAnimal=a.IDAnimal\n" +
+            "inner join Empleados ci on ci.IDEmpleado=c.IDEmpleado\n" +
+            "inner join Habitats h on h.IDHabitat=a.IDHabitat";
             ResultSet r = stm.executeQuery(sql);
             while(r.next()){
-                Object A[] = new Object[4];
-                A[0] = r.getString("clave");
-                A[1] = r.getString("descripcion");
-                A[2] = r.getFloat("precio");
-                A[3] = r.getString("cant");
+                Object A[] = new Object[7];
+                A[0] = r.getString("NOMBRE");
+                A[1] = r.getInt("EDAD");
+                A[2] = r.getString("SEXO");
+                A[3] = r.getString("ESTADO");
+                A[4] = r.getString("ESPECIE");
+                A[5] = r.getString("VETERINARIO");
+                A[6] = r.getString("HABITAD");
                 m.addRow(A);
             }
         } catch (SQLException ex) {
