@@ -6,10 +6,17 @@ package Frames;
 
 import Clases.SQL;
 import ConexionBD.Conexion;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import javax.swing.table.DefaultTableModel;
+import java.sql.CallableStatement;
+import java.sql.PreparedStatement;
+import java.util.ArrayList;
+import javax.swing.JOptionPane.*;
+import static javax.swing.JOptionPane.*;
 
 public class Ventana extends javax.swing.JFrame {
 private DefaultTableModel m;
@@ -23,6 +30,22 @@ private DefaultTableModel m;
         m.setColumnIdentifiers(nombresColumnas);
         Tabla.setModel(m);
         llenarTabla();
+        Tabla.addMouseListener(new MouseAdapter(){
+            public void mouseClicked(MouseEvent e){
+                int i = Tabla.getSelectedRow();
+                if(i >=0){
+                    txtNombre.setText("");
+                txtSexo.setText(Tabla.getValueAt(i,0).toString());
+                txtEdad.setText(Tabla.getValueAt(i,1).toString());
+                txtEspecie.setText(Tabla.getValueAt(i,2).toString());
+                txtHabitat.setText(Tabla.getValueAt(i,3).toString());
+                txtEstado.setText(Tabla.getValueAt(i,4).toString());
+                txtAlimento.setText(Tabla.getValueAt(i,5).toString());
+                txtVeterinario.setText(Tabla.getValueAt(i,6).toString());
+                txtFiltrar.setText(Tabla.getValueAt(i,7).toString());
+                }
+            }
+        });
     }
     public void llenarTabla(){
         try {
@@ -48,6 +71,19 @@ private DefaultTableModel m;
             System.out.println(ex.getMessage());
         }
     }
+    
+    
+    public void limpiarCasillas(){
+        txtNombre.setText("");
+        txtSexo.setText("");
+        txtEdad.setText("");
+        txtEspecie.setText("");
+        txtHabitat.setText("");
+        txtEstado.setText("");
+        txtAlimento.setText("");
+        txtVeterinario.setText("");
+        txtFiltrar.setText("");
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -59,7 +95,7 @@ private DefaultTableModel m;
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
-        jButton1 = new javax.swing.JButton();
+        btnEliminar = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
@@ -70,36 +106,37 @@ private DefaultTableModel m;
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
-        jTextField6 = new javax.swing.JTextField();
-        jTextField7 = new javax.swing.JTextField();
-        jTextField8 = new javax.swing.JTextField();
-        jTextField9 = new javax.swing.JTextField();
-        jTextField10 = new javax.swing.JTextField();
-        jTextField11 = new javax.swing.JTextField();
-        jButton6 = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
-        jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
-        jTextField2 = new javax.swing.JTextField();
+        txtFiltrar = new javax.swing.JTextField();
+        txtHabitat = new javax.swing.JTextField();
+        txtEstado = new javax.swing.JTextField();
+        txtNombre = new javax.swing.JTextField();
+        txtEspecie = new javax.swing.JTextField();
+        txtEdad = new javax.swing.JTextField();
+        txtAlimento = new javax.swing.JTextField();
+        txtVeterinario = new javax.swing.JTextField();
+        btnLimpiar = new javax.swing.JButton();
+        btnFiltrar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
+        btnActualizar = new javax.swing.JButton();
+        txtSexo = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel1.setBackground(new java.awt.Color(190, 219, 185));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jButton1.setBackground(new java.awt.Color(214, 60, 60));
-        jButton1.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jButton1.setText("Eliminar");
-        jButton1.setBorder(null);
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        btnEliminar.setBackground(new java.awt.Color(214, 60, 60));
+        btnEliminar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        btnEliminar.setForeground(new java.awt.Color(255, 255, 255));
+        btnEliminar.setText("Eliminar");
+        btnEliminar.setBorder(null);
+        btnEliminar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnEliminar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 260, 40));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 260, 40));
 
         jLabel1.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel1.setText("Sexo");
@@ -148,145 +185,157 @@ private DefaultTableModel m;
         jLabel8.setText("Estado");
         jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 110, -1, 30));
 
-        jTextField1.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField1.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField1.setBorder(null);
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtFiltrar.setBackground(new java.awt.Color(231, 249, 228));
+        txtFiltrar.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtFiltrar.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtFiltrar.setBorder(null);
+        txtFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtFiltrarActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField1, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 280, 260, 40));
+        jPanel1.add(txtFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 280, 260, 40));
 
-        jTextField5.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField5.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField5.setBorder(null);
-        jTextField5.addActionListener(new java.awt.event.ActionListener() {
+        txtHabitat.setBackground(new java.awt.Color(231, 249, 228));
+        txtHabitat.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtHabitat.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtHabitat.setBorder(null);
+        txtHabitat.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField5ActionPerformed(evt);
+                txtHabitatActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField5, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 190, 30));
+        jPanel1.add(txtHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 190, 30));
 
-        jTextField6.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField6.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField6.setBorder(null);
-        jTextField6.addActionListener(new java.awt.event.ActionListener() {
+        txtEstado.setBackground(new java.awt.Color(231, 249, 228));
+        txtEstado.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtEstado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtEstado.setBorder(null);
+        txtEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField6ActionPerformed(evt);
+                txtEstadoActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField6, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 190, 30));
+        jPanel1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 190, 30));
 
-        jTextField7.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField7.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
-        jTextField7.setBorder(null);
-        jTextField7.addActionListener(new java.awt.event.ActionListener() {
+        txtNombre.setBackground(new java.awt.Color(231, 249, 228));
+        txtNombre.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtNombre.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtNombre.setBorder(null);
+        txtNombre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField7ActionPerformed(evt);
+                txtNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField7, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 190, 30));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 190, 30));
 
-        jTextField8.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField8.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField8.setBorder(null);
-        jTextField8.addActionListener(new java.awt.event.ActionListener() {
+        txtEspecie.setBackground(new java.awt.Color(231, 249, 228));
+        txtEspecie.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtEspecie.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtEspecie.setBorder(null);
+        txtEspecie.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField8ActionPerformed(evt);
+                txtEspecieActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField8, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 190, 30));
+        jPanel1.add(txtEspecie, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 190, 30));
 
-        jTextField9.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField9.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField9.setBorder(null);
-        jTextField9.addActionListener(new java.awt.event.ActionListener() {
+        txtEdad.setBackground(new java.awt.Color(231, 249, 228));
+        txtEdad.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtEdad.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtEdad.setBorder(null);
+        txtEdad.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField9ActionPerformed(evt);
+                txtEdadActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField9, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 190, 30));
+        jPanel1.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 190, 30));
 
-        jTextField10.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField10.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField10.setBorder(null);
-        jTextField10.addActionListener(new java.awt.event.ActionListener() {
+        txtAlimento.setBackground(new java.awt.Color(231, 249, 228));
+        txtAlimento.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtAlimento.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtAlimento.setBorder(null);
+        txtAlimento.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField10ActionPerformed(evt);
+                txtAlimentoActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField10, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, 190, 30));
+        jPanel1.add(txtAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, 190, 30));
 
-        jTextField11.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField11.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField11.setBorder(null);
-        jTextField11.addActionListener(new java.awt.event.ActionListener() {
+        txtVeterinario.setBackground(new java.awt.Color(231, 249, 228));
+        txtVeterinario.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtVeterinario.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtVeterinario.setBorder(null);
+        txtVeterinario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField11ActionPerformed(evt);
+                txtVeterinarioActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField11, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, 190, 30));
+        jPanel1.add(txtVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, 190, 30));
 
-        jButton6.setBackground(new java.awt.Color(160, 160, 160));
-        jButton6.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jButton6.setForeground(new java.awt.Color(255, 255, 255));
-        jButton6.setText("Limpiar");
-        jButton6.setBorder(null);
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
+        btnLimpiar.setBackground(new java.awt.Color(160, 160, 160));
+        btnLimpiar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        btnLimpiar.setForeground(new java.awt.Color(255, 255, 255));
+        btnLimpiar.setText("Limpiar");
+        btnLimpiar.setBorder(null);
+        btnLimpiar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnLimpiar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
+                btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton6, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 180, 270, 40));
+        jPanel1.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 180, 270, 40));
 
-        jButton7.setBackground(new java.awt.Color(42, 157, 143));
-        jButton7.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jButton7.setForeground(new java.awt.Color(255, 255, 255));
-        jButton7.setText("Filtrar");
-        jButton7.setBorder(null);
-        jButton7.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        btnFiltrar.setBackground(new java.awt.Color(42, 157, 143));
+        btnFiltrar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        btnFiltrar.setForeground(new java.awt.Color(255, 255, 255));
+        btnFiltrar.setText("Filtrar");
+        btnFiltrar.setBorder(null);
+        btnFiltrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnFiltrar.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        btnFiltrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                btnFiltrarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton7, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 280, 150, 40));
+        jPanel1.add(btnFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(860, 280, 150, 40));
 
-        jButton8.setBackground(new java.awt.Color(45, 106, 79));
-        jButton8.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jButton8.setForeground(new java.awt.Color(255, 255, 255));
-        jButton8.setText("Guardar");
-        jButton8.setBorder(null);
-        jButton8.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setBackground(new java.awt.Color(45, 106, 79));
+        btnGuardar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        btnGuardar.setForeground(new java.awt.Color(255, 255, 255));
+        btnGuardar.setText("Insertar");
+        btnGuardar.setBorder(null);
+        btnGuardar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton8ActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton8, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 260, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 260, 40));
 
-        jButton9.setBackground(new java.awt.Color(233, 196, 106));
-        jButton9.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
-        jButton9.setForeground(new java.awt.Color(255, 255, 255));
-        jButton9.setText("Actualizar");
-        jButton9.setBorder(null);
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        btnActualizar.setBackground(new java.awt.Color(233, 196, 106));
+        btnActualizar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        btnActualizar.setForeground(new java.awt.Color(255, 255, 255));
+        btnActualizar.setText("Actualizar");
+        btnActualizar.setBorder(null);
+        btnActualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnActualizar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(jButton9, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 270, 40));
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 270, 40));
 
-        jTextField2.setBackground(new java.awt.Color(231, 249, 228));
-        jTextField2.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
-        jTextField2.setBorder(null);
-        jTextField2.addActionListener(new java.awt.event.ActionListener() {
+        txtSexo.setBackground(new java.awt.Color(231, 249, 228));
+        txtSexo.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        txtSexo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
+        txtSexo.setBorder(null);
+        txtSexo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField2ActionPerformed(evt);
+                txtSexoActionPerformed(evt);
             }
         });
-        jPanel1.add(jTextField2, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 190, 30));
+        jPanel1.add(txtSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 190, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -302,61 +351,182 @@ private DefaultTableModel m;
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
+        String nombre = txtNombre.getText();
+        if(nombre.isEmpty()) {
+            showMessageDialog(null, "Selecciona un animal de la tabla o escribe su nombre");
+            return;
+        }
 
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+        int confirmacion = showConfirmDialog(null, "¿Seguro de eliminar a: " + nombre + "?");
 
-    private void jTextField5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField5ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField5ActionPerformed
+        if(confirmacion == YES_OPTION){
+            String sql = "DELETE FROM animales WHERE nombre = ?";
+            try {
+                PreparedStatement pst = Conexion.con.prepareStatement(sql);
+                pst.setString(1, nombre);
+                pst.executeUpdate();
+                showMessageDialog(null, "Eliminado");
+                limpiarCasillas();
+                llenarTabla();
+            } catch (SQLException ex) {
+                 showMessageDialog(null, ex.getMessage());
+            }
+        }
+    }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void jTextField6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField6ActionPerformed
+    private void txtFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltrarActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField6ActionPerformed
+    }//GEN-LAST:event_txtFiltrarActionPerformed
 
-    private void jTextField7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField7ActionPerformed
+    private void txtHabitatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtHabitatActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField7ActionPerformed
+    }//GEN-LAST:event_txtHabitatActionPerformed
 
-    private void jTextField8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField8ActionPerformed
+    private void txtEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEstadoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField8ActionPerformed
+    }//GEN-LAST:event_txtEstadoActionPerformed
 
-    private void jTextField9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField9ActionPerformed
+    private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField9ActionPerformed
+    }//GEN-LAST:event_txtNombreActionPerformed
 
-    private void jTextField10ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField10ActionPerformed
+    private void txtEspecieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEspecieActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField10ActionPerformed
+    }//GEN-LAST:event_txtEspecieActionPerformed
 
-    private void jTextField11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField11ActionPerformed
+    private void txtEdadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtEdadActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField11ActionPerformed
+    }//GEN-LAST:event_txtEdadActionPerformed
 
-    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+    private void txtAlimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtAlimentoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton6ActionPerformed
+    }//GEN-LAST:event_txtAlimentoActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+    private void txtVeterinarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtVeterinarioActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    }//GEN-LAST:event_txtVeterinarioActionPerformed
 
-    private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton8ActionPerformed
+    private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
+        limpiarCasillas();
+    }//GEN-LAST:event_btnLimpiarActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    private void btnFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFiltrarActionPerformed
+    
+    StringBuilder sql = new StringBuilder("SELECT * FROM animales WHERE 1=1");
+    ArrayList<Object> parametros = new ArrayList<>();
 
-    private void jTextField2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField2ActionPerformed
+    String nombre = txtNombre.getText().trim();  
+    String especie = txtEspecie.getText().trim(); 
+    String sexo = txtSexo.getText().trim();    
+    String estado = txtEstado.getText().trim();  
+
+    // 3. Construcción dinámica del Query
+    if (!nombre.isEmpty()) {
+        sql.append(" AND nombre LIKE ?");
+        parametros.add("%" + nombre + "%");
+    }
+    if (!especie.isEmpty()) {
+        sql.append(" AND especie LIKE ?");
+        parametros.add("%" + especie + "%");
+    }
+    if (!sexo.isEmpty()) {
+        sql.append(" AND sexo LIKE ?");
+        parametros.add("%" + sexo + "%");
+    }
+    if (!estado.isEmpty()) {
+        sql.append(" AND estado LIKE ?");
+        parametros.add("%" + estado + "%");
+    }
+
+    try {
+        for (int i = m.getRowCount() - 1; i >= 0; i--) {
+            m.removeRow(i);
+        }
+
+        PreparedStatement pst = Conexion.con.prepareStatement(sql.toString());
+        
+        for (int i = 0; i < parametros.size(); i++) {
+            pst.setObject(i + 1, parametros.get(i));
+        }
+
+        ResultSet r = pst.executeQuery();
+
+        while (r.next()) {
+            Object A[] = new Object[8];
+            A[0] = r.getString("NOMBRE");
+            A[1] = r.getInt("EDAD");
+            A[2] = r.getString("SEXO");
+            A[3] = r.getString("ESTADO");
+            A[4] = r.getString("ESPECIE");
+            A[5] = r.getString("VETERINARIO");
+            A[6] = r.getString("HABITAD");
+            A[7] = r.getString("ALIMENTACION");
+            m.addRow(A);
+        }
+
+    } catch (SQLException ex) {
+        System.out.println("Error Filtro Dinámico: " + ex.getMessage());
+    }
+    }//GEN-LAST:event_btnFiltrarActionPerformed
+
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+    String sql = "{call sp_insertar_animal(?, ?, ?, ?, ?, ?, ?, ?)}";
+
+    try {
+        CallableStatement cs = Conexion.con.prepareCall(sql);
+
+        cs.setString(1, txtNombre.getText());       
+        cs.setInt(2, Integer.parseInt(txtEdad.getText())); 
+        cs.setString(3, txtSexo.getText());       
+        cs.setString(4, txtEstado.getText());       
+        cs.setString(5, txtEspecie.getText());       
+        cs.setString(6, txtVeterinario.getText());      
+        cs.setString(7, txtHabitat.getText());       
+        cs.setString(8, txtAlimento.getText());      
+
+        cs.execute(); 
+        showMessageDialog(null, "Registro Guardado vía Stored Procedure");
+        
+        limpiarCasillas(); 
+        llenarTabla();    
+        
+    } catch (SQLException ex) {
+        showMessageDialog(null, "Error: " + ex.getMessage());
+    } catch (NumberFormatException ex) {
+        showMessageDialog(null, "La edad debe ser un número");
+    }
+    }//GEN-LAST:event_btnGuardarActionPerformed
+
+    private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
+        String sql = "UPDATE animales SET edad=?, sexo=?, estado=?, especie=?, veterinario=?, habitad=?, alimentacion=? WHERE nombre=?";
+        try {
+            PreparedStatement pst = Conexion.con.prepareStatement(sql);
+            pst.setInt(1, Integer.parseInt(txtEdad.getText()));
+            pst.setString(2, txtSexo.getText());
+            pst.setString(3, txtEstado.getText());
+            pst.setString(4, txtEspecie.getText());
+            pst.setString(5, txtVeterinario.getText());
+            pst.setString(6, txtHabitat.getText());
+            pst.setString(7, txtAlimento.getText());
+            pst.setString(8, txtNombre.getText());
+
+            int filas = pst.executeUpdate();
+            if(filas > 0){
+                 showMessageDialog(null, "Registro Actualizado Correctamente");
+                 limpiarCasillas();
+                 llenarTabla();
+            } else {
+                 showMessageDialog(null, "No se encontró el animal para actualizar");
+            }
+        } catch (SQLException ex) {
+            showMessageDialog(null, ex.getMessage());
+        }
+    }//GEN-LAST:event_btnActualizarActionPerformed
+
+    private void txtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSexoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField2ActionPerformed
+    }//GEN-LAST:event_txtSexoActionPerformed
 
     /**
      * @param args the command line arguments
@@ -395,11 +565,11 @@ private DefaultTableModel m;
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;
-    private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton6;
-    private javax.swing.JButton jButton7;
-    private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
+    private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnFiltrar;
+    private javax.swing.JButton btnGuardar;
+    private javax.swing.JButton btnLimpiar;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -410,14 +580,14 @@ private DefaultTableModel m;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField10;
-    private javax.swing.JTextField jTextField11;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JTextField jTextField7;
-    private javax.swing.JTextField jTextField8;
-    private javax.swing.JTextField jTextField9;
+    private javax.swing.JTextField txtAlimento;
+    private javax.swing.JTextField txtEdad;
+    private javax.swing.JTextField txtEspecie;
+    private javax.swing.JTextField txtEstado;
+    private javax.swing.JTextField txtFiltrar;
+    private javax.swing.JTextField txtHabitat;
+    private javax.swing.JTextField txtNombre;
+    private javax.swing.JTextField txtSexo;
+    private javax.swing.JTextField txtVeterinario;
     // End of variables declaration//GEN-END:variables
 }
