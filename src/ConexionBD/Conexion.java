@@ -24,7 +24,7 @@ public class Conexion {
     public static Connection getConnection(){
         try {
             con = DriverManager.getConnection(url, user, password);
-        } catch (SQLException ex) {
+        }catch (SQLException ex) {
             System.getLogger(Conexion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
         return con;
