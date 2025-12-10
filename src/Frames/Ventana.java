@@ -5,14 +5,38 @@
 package Frames;
 
 import ConexionBD.Conexion;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.table.DefaultTableModel;
 
 public class Ventana extends javax.swing.JFrame {
-
+private DefaultTableModel m;
+    private Statement stm;
     public Ventana() {
         initComponents();
+        Conexion.getConnection();
         this.setLocationRelativeTo(null);
+        m = (DefaultTableModel) Tabla.getModel();
+        llenarTabla();
     }
-
+    public void llenarTabla(){
+        try {
+            stm = Conexion.con.createStatement();
+            String sql = "SELECT * FROM ARTICULO";
+            ResultSet r = stm.executeQuery(sql);
+            while(r.next()){
+                Object A[] = new Object[4];
+                A[0] = r.getString("clave");
+                A[1] = r.getString("descripcion");
+                A[2] = r.getFloat("precio");
+                A[3] = r.getString("cant");
+                m.addRow(A);
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -30,7 +54,7 @@ public class Ventana extends javax.swing.JFrame {
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        Tabla = new javax.swing.JTable();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
@@ -82,7 +106,7 @@ public class Ventana extends javax.swing.JFrame {
         jLabel4.setText("Habitat");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, -1, 30));
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
                 {},
@@ -93,7 +117,7 @@ public class Ventana extends javax.swing.JFrame {
 
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(Tabla);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 980, 310));
 
@@ -145,6 +169,7 @@ public class Ventana extends javax.swing.JFrame {
 
         jTextField7.setBackground(new java.awt.Color(231, 249, 228));
         jTextField7.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        jTextField7.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         jTextField7.setBorder(null);
         jTextField7.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -358,6 +383,7 @@ public class Ventana extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable Tabla;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton6;
     private javax.swing.JButton jButton7;
@@ -373,7 +399,6 @@ public class Ventana extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
     private javax.swing.JTextField jTextField1;
     private javax.swing.JTextField jTextField10;
     private javax.swing.JTextField jTextField11;

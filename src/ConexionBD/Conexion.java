@@ -17,9 +17,7 @@ public class Conexion {
     private static String url = "jdbc:sqlserver://localhost:1433;databaseName=Zoologico;encrypt=false"; //tadeo
     private static String user = "sa";
     private static String password = "1234";
-    private static Connection con = null;
-
-    
+    public static Connection con = null;
     public static Connection getConnection(){
         try {
             con = DriverManager.getConnection(url, user, password);
