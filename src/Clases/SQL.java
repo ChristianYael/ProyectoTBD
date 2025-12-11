@@ -4,6 +4,11 @@
  */
 package Clases;
 
+import ConexionBD.Conexion;
+import java.sql.Connection;
+import java.sql.SQLException;
+import java.sql.CallableStatement;
+
 /**
  *
  * @author Tadeo Nuñez
@@ -19,4 +24,23 @@ public class SQL {
             "inner join Habitats h on h.IDHabitat=a.IDHabitat\n" +
             "inner join Alimentaciones m on m.IDAnimal=a.IDAnimal\n" +
             "inner join Alimentos o on o.IDAlimento=m.IDAlimento";
+    public void insertarAnimal(String nombre, int edad, String sexo, String estado,
+                               String nombreComun, String veterinario, String habitad, String alimento) {
+        String sql = "{ call sp_insertar(?, ?, ?, ?, ?, ?, ?, ?) }";
+        try (Connection conn = Conexion.getConnection(); 
+             CallableStatement cstmt = conn.prepareCall(sql)) { 
+            cstmt.setString(1, nombre);
+            cstmt.setInt(2, edad);
+            cstmt.setString(3, sexo);
+            cstmt.setString(4, estado);
+            cstmt.setString(5, nombreComun);
+            cstmt.setString(6, veterinario);
+            cstmt.setString(7, habitad);
+            cstmt.setString(8, alimento);
+            cstmt.execute();
+            System.out.println("Procedimiento ejecutado para: " + nombre);
+        } catch (SQLException e) {
+            System.err.println("Error al insertar " + nombre + ": " + e.getMessage());
+        }
+    }
 }
