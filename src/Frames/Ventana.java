@@ -98,7 +98,6 @@ private DefaultTableModel m;
     }
     
     private void filtrarTodo() {
-        // 1. Obtener textos (enviamos NULL si están vacíos para que el SP los ignore)
         String nombre = txtNombre.getText().trim().isEmpty() ? null : txtNombre.getText().trim();
         String especie = txtEspecie.getText().trim().isEmpty() ? null : txtEspecie.getText().trim();
         String sexo = txtSexo.getText().trim().isEmpty() ? null : txtSexo.getText().trim();
@@ -108,7 +107,6 @@ private DefaultTableModel m;
         String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?)}";
 
         try {
-            // Limpiamos la tabla visual
             DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
             m.setRowCount(0);
 
@@ -138,7 +136,7 @@ private DefaultTableModel m;
         }
     }
     
-    private void filtrar() {    
+    private void filtrar() {
     String nombre = (ckNombre.isSelected() && !txtNombre.getText().trim().isEmpty()) 
             ? txtNombre.getText().trim() : null;
             
@@ -151,32 +149,37 @@ private DefaultTableModel m;
     String estado = (ckEstado.isSelected() && !txtEstado.getText().trim().isEmpty()) 
             ? txtEstado.getText().trim() : null;
     
-    String edad = (ckEdad.isSelected() && !txtEstado.getText().trim().isEmpty()) 
-            ? txtEstado.getText().trim() : null;
+    String edad = (ckEdad.isSelected() && !txtEdad.getText().trim().isEmpty()) 
+            ? txtEdad.getText().trim() : null;
     
     String habitat = (ckHabitat.isSelected() && !txtHabitat.getText().trim().isEmpty()) 
             ? txtHabitat.getText().trim() : null;
     
-    String Alimento = (ckAlimento.isSelected() && !txtAlimento.getText().trim().isEmpty()) 
+    String alimento = (ckAlimento.isSelected() && !txtAlimento.getText().trim().isEmpty()) 
             ? txtAlimento.getText().trim() : null;
     
-    String Veterinario = (ckVeterinario.isSelected() && !txtVeterinario.getText().trim().isEmpty()) 
+    String veterinario = (ckVeterinario.isSelected() && !txtVeterinario.getText().trim().isEmpty()) 
             ? txtVeterinario.getText().trim() : null;
     
     String general = txtFiltrar.getText().trim().isEmpty() ? null : txtFiltrar.getText().trim();
 
-    String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?)}";
+    String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
     try {
         DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
-        m.setRowCount(0);
+        m.setRowCount(0); 
 
         CallableStatement cs = Conexion.con.prepareCall(sql);
+        
         cs.setString(1, nombre);
-        cs.setString(2, especie);
+        cs.setString(2, edad);
         cs.setString(3, sexo);
         cs.setString(4, estado);
-        cs.setString(5, general);
+        cs.setString(5, especie);
+        cs.setString(6, veterinario);
+        cs.setString(7, habitat);
+        cs.setString(8, alimento);
+        cs.setString(9, general);
 
         ResultSet r = cs.executeQuery();
 
@@ -188,7 +191,7 @@ private DefaultTableModel m;
             A[3] = r.getString("ESTADO");
             A[4] = r.getString("ESPECIE");
             A[5] = r.getString("VETERINARIO");
-            A[6] = r.getString("HABITAT"); // Ojo: en tu BD puede ser HABITAT o HABITAD
+            A[6] = r.getString("HABITAD"); 
             A[7] = r.getString("ALIMENTACION");
             m.addRow(A);
         }
