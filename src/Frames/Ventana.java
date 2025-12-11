@@ -866,7 +866,7 @@ private DefaultTableModel m;
     
         if (!texto.equals("Macho") && !texto.equalsIgnoreCase("Hembra")) {
             txtSexo.setText("");
-            showMessageDialog(null,"Datos incorrectos.\nSolo se aceptan 'ACTIVO' o 'BAJA'");
+            showMessageDialog(null,"Datos incorrectos.\nSolo se aceptan 'Macho' o 'Hembra'");
         }
     }//GEN-LAST:event_txtSexoFocusLost
 
