@@ -21,15 +21,17 @@ import static javax.swing.JOptionPane.*;
 public class Ventana extends javax.swing.JFrame {
 private DefaultTableModel m;
     private Statement stm;
+    private boolean vercheck = false;
     public Ventana() {
         initComponents();
         Conexion.getConnection();
         this.setLocationRelativeTo(null);
         m = (DefaultTableModel) Tabla.getModel();
-        String[] nombresColumnas = {"NOMBRE", "EDAD", "SEXO", "ESTADO", "ESPECIE", "VETERINARIO", "HABITAD","ALIMENTACION"};
+        String[] nombresColumnas = {"NOMBRE", "EDAD", "SEXO", "ESTADO", "ESPECIE", "VETERINARIO", "HABITAT","ALIMENTACION"};
         m.setColumnIdentifiers(nombresColumnas);
         Tabla.setModel(m);
         llenarTabla();
+        checkboxver();
         Tabla.addMouseListener(new MouseAdapter(){
             public void mouseClicked(MouseEvent e){
                 int i = Tabla.getSelectedRow();
@@ -62,7 +64,7 @@ private DefaultTableModel m;
                 A[3] = r.getString("ESTADO");
                 A[4] = r.getString("ESPECIE");
                 A[5] = r.getString("VETERINARIO");
-                A[6] = r.getString("HABITAD");
+                A[6] = r.getString("HABITAT");
                 A[7] = r.getString("ALIMENTACION");
                 m.addRow(A);
             }
@@ -71,6 +73,17 @@ private DefaultTableModel m;
         }
     }
     
+    public void checkboxver(){
+        ckNombre.setVisible(vercheck);
+        ckSexo.setVisible(vercheck);
+        ckEdad.setVisible(vercheck);
+        ckEspecie.setVisible(vercheck);
+        ckHabitat.setVisible(vercheck);
+        ckEstado.setVisible(vercheck);
+        ckAlimento.setVisible(vercheck);
+        ckVeterinario.setVisible(vercheck);
+        vercheck = !vercheck;
+    }
     
     public void limpiarCasillas(){
         txtNombre.setText("");
@@ -84,34 +97,88 @@ private DefaultTableModel m;
         txtFiltrar.setText("");
     }
     
-    private void filtrar() {
-    StringBuilder sql = new StringBuilder(SQL.LlenarTabla);
-    
-    sql.append(" WHERE 1=1 "); 
+    private void filtrarTodo() {
+        // 1. Obtener textos (enviamos NULL si están vacíos para que el SP los ignore)
+        String nombre = txtNombre.getText().trim().isEmpty() ? null : txtNombre.getText().trim();
+        String especie = txtEspecie.getText().trim().isEmpty() ? null : txtEspecie.getText().trim();
+        String sexo = txtSexo.getText().trim().isEmpty() ? null : txtSexo.getText().trim();
+        String estado = txtEstado.getText().trim().isEmpty() ? null : txtEstado.getText().trim();
+        String general = txtFiltrar.getText().trim().isEmpty() ? null : txtFiltrar.getText().trim();
 
-    String texto = txtFiltrar.getText().trim();
+        String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?)}";
 
-    if (!texto.isEmpty()) {
-        sql.append(" AND (");
-        sql.append(" a.Nombre LIKE '%").append(texto).append("%'");         //Nombre Animal
-        sql.append(" OR e.NombreComun LIKE '%").append(texto).append("%'"); //Especie
-        sql.append(" OR ci.Nombre LIKE '%").append(texto).append("%'");     //Veterinario
-        sql.append(" OR h.NombreHabitat LIKE '%").append(texto).append("%'");//Habitat
-        sql.append(" OR o.NombreAlimento LIKE '%").append(texto).append("%'");// Alimento
-        sql.append(" OR a.Sexo LIKE '%").append(texto).append("%'");        //Sexo
-        sql.append(" OR a.Estado LIKE '%").append(texto).append("%'"); //Estado
-        sql.append(" OR a.Edad LIKE '%").append(texto).append("%'"); //Edad
-        sql.append(" )");
+        try {
+            // Limpiamos la tabla visual
+            DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
+            m.setRowCount(0);
+
+            CallableStatement cs = Conexion.con.prepareCall(sql);
+            cs.setString(1, nombre);
+            cs.setString(2, especie);
+            cs.setString(3, sexo);
+            cs.setString(4, estado);
+            cs.setString(5, general);
+
+            ResultSet r = cs.executeQuery();
+
+            while (r.next()) {
+                Object A[] = new Object[8];
+                A[0] = r.getString("NOMBRE");
+                A[1] = r.getInt("EDAD");
+                A[2] = r.getString("SEXO");
+                A[3] = r.getString("ESTADO");
+                A[4] = r.getString("ESPECIE");
+                A[5] = r.getString("VETERINARIO");
+                A[6] = r.getString("HABITAT");
+                A[7] = r.getString("ALIMENTACION");
+                m.addRow(A);
+            }
+        } catch (SQLException ex) {
+            System.out.println("Error al filtrar con SP: " + ex.getMessage());
+        }
     }
+    
+    private void filtrar() {    
+    String nombre = (ckNombre.isSelected() && !txtNombre.getText().trim().isEmpty()) 
+            ? txtNombre.getText().trim() : null;
+            
+    String especie = (ckEspecie.isSelected() && !txtEspecie.getText().trim().isEmpty()) 
+            ? txtEspecie.getText().trim() : null;
+            
+    String sexo = (ckSexo.isSelected() && !txtSexo.getText().trim().isEmpty()) 
+            ? txtSexo.getText().trim() : null;
+            
+    String estado = (ckEstado.isSelected() && !txtEstado.getText().trim().isEmpty()) 
+            ? txtEstado.getText().trim() : null;
+    
+    String edad = (ckEdad.isSelected() && !txtEstado.getText().trim().isEmpty()) 
+            ? txtEstado.getText().trim() : null;
+    
+    String habitat = (ckHabitat.isSelected() && !txtHabitat.getText().trim().isEmpty()) 
+            ? txtHabitat.getText().trim() : null;
+    
+    String Alimento = (ckAlimento.isSelected() && !txtAlimento.getText().trim().isEmpty()) 
+            ? txtAlimento.getText().trim() : null;
+    
+    String Veterinario = (ckVeterinario.isSelected() && !txtVeterinario.getText().trim().isEmpty()) 
+            ? txtVeterinario.getText().trim() : null;
+    
+    String general = txtFiltrar.getText().trim().isEmpty() ? null : txtFiltrar.getText().trim();
+
+    String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?)}";
 
     try {
         DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
         m.setRowCount(0);
 
-        System.out.println("SQL Buscador: " + sql.toString());
+        CallableStatement cs = Conexion.con.prepareCall(sql);
+        cs.setString(1, nombre);
+        cs.setString(2, especie);
+        cs.setString(3, sexo);
+        cs.setString(4, estado);
+        cs.setString(5, general);
 
-        Statement st = Conexion.con.createStatement();
-        ResultSet r = st.executeQuery(sql.toString());
+        ResultSet r = cs.executeQuery();
 
         while (r.next()) {
             Object A[] = new Object[8];
@@ -121,14 +188,14 @@ private DefaultTableModel m;
             A[3] = r.getString("ESTADO");
             A[4] = r.getString("ESPECIE");
             A[5] = r.getString("VETERINARIO");
-            A[6] = r.getString("HABITAD");
+            A[6] = r.getString("HABITAT"); // Ojo: en tu BD puede ser HABITAT o HABITAD
             A[7] = r.getString("ALIMENTACION");
             m.addRow(A);
         }
     } catch (SQLException ex) {
-        System.out.println("Error en Buscador: " + ex.getMessage());
+        System.out.println("Error al filtrar: " + ex.getMessage());
     }
-}
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -164,6 +231,15 @@ private DefaultTableModel m;
         btnActualizar = new javax.swing.JButton();
         txtSexo = new javax.swing.JTextField();
         jLabel9 = new javax.swing.JLabel();
+        ckVeterinario = new javax.swing.JCheckBox();
+        ckNombre = new javax.swing.JCheckBox();
+        ckEdad = new javax.swing.JCheckBox();
+        ckSexo = new javax.swing.JCheckBox();
+        ckEstado = new javax.swing.JCheckBox();
+        ckHabitat = new javax.swing.JCheckBox();
+        ckEspecie = new javax.swing.JCheckBox();
+        ckAlimento = new javax.swing.JCheckBox();
+        btnBuscar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -255,6 +331,11 @@ private DefaultTableModel m;
                 txtHabitatActionPerformed(evt);
             }
         });
+        txtHabitat.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtHabitatKeyReleased(evt);
+            }
+        });
         jPanel1.add(txtHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 190, 30));
 
         txtEstado.setBackground(new java.awt.Color(231, 249, 228));
@@ -314,6 +395,11 @@ private DefaultTableModel m;
                 txtEdadActionPerformed(evt);
             }
         });
+        txtEdad.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtEdadKeyReleased(evt);
+            }
+        });
         jPanel1.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 190, 30));
 
         txtAlimento.setBackground(new java.awt.Color(231, 249, 228));
@@ -325,6 +411,11 @@ private DefaultTableModel m;
                 txtAlimentoActionPerformed(evt);
             }
         });
+        txtAlimento.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtAlimentoKeyReleased(evt);
+            }
+        });
         jPanel1.add(txtAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, 190, 30));
 
         txtVeterinario.setBackground(new java.awt.Color(231, 249, 228));
@@ -334,6 +425,11 @@ private DefaultTableModel m;
         txtVeterinario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtVeterinarioActionPerformed(evt);
+            }
+        });
+        txtVeterinario.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtVeterinarioKeyReleased(evt);
             }
         });
         jPanel1.add(txtVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, 190, 30));
@@ -396,6 +492,83 @@ private DefaultTableModel m;
         jLabel9.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel9.setText("Veterinario");
         jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 70, -1, 30));
+
+        ckVeterinario.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckVeterinario.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckVeterinarioActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, -1, 30));
+
+        ckNombre.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckNombre.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckNombreActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, -1, 30));
+
+        ckEdad.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckEdad.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckEdadActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, 30));
+
+        ckSexo.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckSexo.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckSexoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, -1, 30));
+
+        ckEstado.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckEstado.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckEstadoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, -1, 30));
+
+        ckHabitat.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckHabitat.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckHabitatActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 70, -1, 30));
+
+        ckEspecie.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckEspecie.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckEspecieActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckEspecie, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 30, -1, 30));
+
+        ckAlimento.setMaximumSize(new java.awt.Dimension(25, 25));
+        ckAlimento.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ckAlimentoActionPerformed(evt);
+            }
+        });
+        jPanel1.add(ckAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 30, -1, 30));
+
+        btnBuscar.setBackground(new java.awt.Color(160, 160, 160));
+        btnBuscar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
+        btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
+        btnBuscar.setText("Buscar");
+        btnBuscar.setBorder(null);
+        btnBuscar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBuscar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBuscarActionPerformed(evt);
+            }
+        });
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, 270, 40));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -500,7 +673,7 @@ private DefaultTableModel m;
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        String sql = "UPDATE animales SET edad=?, sexo=?, estado=?, especie=?, veterinario=?, habitad=?, alimentacion=? WHERE nombre=?";
+        String sql = "UPDATE animales SET edad=?, sexo=?, estado=?, especie=?, veterinario=?, habitat=?, alimentacion=? WHERE nombre=?";
         try {
             PreparedStatement pst = Conexion.con.prepareStatement(sql);
             pst.setInt(1, Integer.parseInt(txtEdad.getText()));
@@ -526,7 +699,7 @@ private DefaultTableModel m;
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void txtSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSexoActionPerformed
-        // TODO add your handling code here:
+        
     }//GEN-LAST:event_txtSexoActionPerformed
 
     private void txtFiltrarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtFiltrarKeyReleased
@@ -534,20 +707,72 @@ private DefaultTableModel m;
     }//GEN-LAST:event_txtFiltrarKeyReleased
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-       
+        filtrar();
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void txtSexoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSexoKeyReleased
-        
+        filtrar();
     }//GEN-LAST:event_txtSexoKeyReleased
 
     private void txtEstadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEstadoKeyReleased
-        
+        filtrar();
     }//GEN-LAST:event_txtEstadoKeyReleased
 
     private void txtEspecieKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEspecieKeyReleased
-        
+        filtrar();
     }//GEN-LAST:event_txtEspecieKeyReleased
+
+    private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
+        checkboxver();
+    }//GEN-LAST:event_btnBuscarActionPerformed
+
+    private void ckNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckNombreActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckNombreActionPerformed
+
+    private void ckEdadActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckEdadActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckEdadActionPerformed
+
+    private void ckSexoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckSexoActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckSexoActionPerformed
+
+    private void ckEspecieActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckEspecieActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckEspecieActionPerformed
+
+    private void ckHabitatActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckHabitatActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckHabitatActionPerformed
+
+    private void ckEstadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckEstadoActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckEstadoActionPerformed
+
+    private void ckAlimentoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckAlimentoActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckAlimentoActionPerformed
+
+    private void ckVeterinarioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ckVeterinarioActionPerformed
+        filtrar();
+    }//GEN-LAST:event_ckVeterinarioActionPerformed
+
+    private void txtEdadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyReleased
+        filtrar();
+    }//GEN-LAST:event_txtEdadKeyReleased
+
+    private void txtHabitatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHabitatKeyReleased
+        filtrar();
+    }//GEN-LAST:event_txtHabitatKeyReleased
+
+    private void txtAlimentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAlimentoKeyReleased
+        filtrar();
+    }//GEN-LAST:event_txtAlimentoKeyReleased
+
+    private void txtVeterinarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVeterinarioKeyReleased
+        filtrar();
+    }//GEN-LAST:event_txtVeterinarioKeyReleased
 
     /**
      * @param args the command line arguments
@@ -587,9 +812,18 @@ private DefaultTableModel m;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable Tabla;
     private javax.swing.JButton btnActualizar;
+    private javax.swing.JButton btnBuscar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
+    private javax.swing.JCheckBox ckAlimento;
+    private javax.swing.JCheckBox ckEdad;
+    private javax.swing.JCheckBox ckEspecie;
+    private javax.swing.JCheckBox ckEstado;
+    private javax.swing.JCheckBox ckHabitat;
+    private javax.swing.JCheckBox ckNombre;
+    private javax.swing.JCheckBox ckSexo;
+    private javax.swing.JCheckBox ckVeterinario;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

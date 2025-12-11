@@ -11,7 +11,7 @@ package Clases;
 public class SQL {
     public static final String LlenarTabla="select a.Nombre as NOMBRE,a.Edad AS EDAD,a.Sexo AS SEXO\n" +
             ",a.Estado AS ESTADO,e.NombreComun AS ESPECIE,ci.Nombre AS VETERINARIO,\n" +
-            "h.NombreHabitat AS HABITAD,o.NombreAlimento as ALIMENTACION\n" +
+            "h.NombreHabitat AS HABITAT,o.NombreAlimento as ALIMENTACION\n" +
             "from Animales a\n" +
             "inner join Especies e on e.IDEspecie=a.IDEspecie\n" +
             "inner join AtencionVeterinaria c on c.IDAnimal=a.IDAnimal\n" +
