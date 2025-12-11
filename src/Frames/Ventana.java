@@ -48,31 +48,35 @@ private DefaultTableModel m;
             }
         });
     }
-    public void llenarTabla(){
-        try {
-            for (int i = m.getRowCount() - 1; i >= 0; i--) {
-            m.removeRow(i);
-            }
-            stm = Conexion.con.createStatement();
-            String sql = SQL.LlenarTabla;
-            ResultSet r = stm.executeQuery(sql);
-            while(r.next()){
-                Object A[] = new Object[8];
-                A[0] = r.getString("NOMBRE");
-                A[1] = r.getInt("EDAD");
-                A[2] = r.getString("SEXO");
-                A[3] = r.getString("ESTADO");
-                A[4] = r.getString("ESPECIE");
-                A[5] = r.getString("VETERINARIO");
-                A[6] = r.getString("HABITAT");
-                A[7] = r.getString("ALIMENTACION");
-                m.addRow(A);
-            }
-            conteo();
-            
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
+    public void llenarTabla() {
+    for (int i = m.getRowCount() - 1; i >= 0; i--) {
+        m.removeRow(i);
+    }
+
+    String sql = SQL.LlenarTabla;
+
+    try (java.sql.Connection con = Conexion.getConnection();
+         Statement st = con.createStatement();
+         ResultSet r = st.executeQuery(sql)) {
+
+        while (r.next()) {
+            Object A[] = new Object[8]; 
+            A[0] = r.getString("NOMBRE"); 
+            A[1] = r.getInt("EDAD");
+            A[2] = r.getString("SEXO");
+            A[3] = r.getString("ESTADO");
+            A[4] = r.getString("ESPECIE");
+            A[5] = r.getString("VETERINARIO");
+            A[6] = r.getString("HABITAT");
+            A[7] = r.getString("ALIMENTACION");
+            m.addRow(A);
         }
+
+        conteo();
+
+    } catch (SQLException ex) {
+        System.out.println("Error en llenarTabla: " + ex.getMessage());
+    }
     }
     
     public void conteo(){
@@ -111,40 +115,24 @@ private DefaultTableModel m;
     } 
     
     private void filtrar() {
-    String nombre = (ckNombre.isSelected() && !txtNombre.getText().trim().isEmpty()) 
-            ? txtNombre.getText().trim() : null;
-            
-    String especie = (ckEspecie.isSelected() && !txtEspecie.getText().trim().isEmpty()) 
-            ? txtEspecie.getText().trim() : null;
-            
-    String sexo = (ckSexo.isSelected() && !txtSexo.getText().trim().isEmpty()) 
-            ? txtSexo.getText().trim() : null;
-            
-    String estado = (ckEstado.isSelected() && !txtEstado.getText().trim().isEmpty()) 
-            ? txtEstado.getText().trim() : null;
-    
-    String edad = (ckEdad.isSelected() && !txtEdad.getText().trim().isEmpty()) 
-            ? txtEdad.getText().trim() : null;
-    
-    String habitat = (ckHabitat.isSelected() && !txtHabitat.getText().trim().isEmpty()) 
-            ? txtHabitat.getText().trim() : null;
-    
-    String alimento = (ckAlimento.isSelected() && !txtAlimento.getText().trim().isEmpty()) 
-            ? txtAlimento.getText().trim() : null;
-    
-    String veterinario = (ckVeterinario.isSelected() && !txtVeterinario.getText().trim().isEmpty()) 
-            ? txtVeterinario.getText().trim() : null;
-    
+    String nombre = (ckNombre.isSelected() && !txtNombre.getText().trim().isEmpty()) ? txtNombre.getText().trim() : null;
+    String especie = (ckEspecie.isSelected() && !txtEspecie.getText().trim().isEmpty()) ? txtEspecie.getText().trim() : null;
+    String sexo = (ckSexo.isSelected() && !txtSexo.getText().trim().isEmpty()) ? txtSexo.getText().trim() : null;
+    String estado = (ckEstado.isSelected() && !txtEstado.getText().trim().isEmpty()) ? txtEstado.getText().trim() : null;
+    String edad = (ckEdad.isSelected() && !txtEdad.getText().trim().isEmpty()) ? txtEdad.getText().trim() : null;
+    String habitat = (ckHabitat.isSelected() && !txtHabitat.getText().trim().isEmpty()) ? txtHabitat.getText().trim() : null;
+    String alimento = (ckAlimento.isSelected() && !txtAlimento.getText().trim().isEmpty()) ? txtAlimento.getText().trim() : null;
+    String veterinario = (ckVeterinario.isSelected() && !txtVeterinario.getText().trim().isEmpty()) ? txtVeterinario.getText().trim() : null;
     String general = txtFiltrar.getText().trim().isEmpty() ? null : txtFiltrar.getText().trim();
 
     String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
 
-    try {
+    try (java.sql.Connection con = Conexion.getConnection();
+         CallableStatement cs = con.prepareCall(sql)) {
+        
         DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
         m.setRowCount(0); 
 
-        CallableStatement cs = Conexion.con.prepareCall(sql);
-        
         cs.setString(1, nombre);
         cs.setString(2, edad);
         cs.setString(3, sexo);
@@ -155,20 +143,23 @@ private DefaultTableModel m;
         cs.setString(8, alimento);
         cs.setString(9, general);
 
-        ResultSet r = cs.executeQuery();
-
-        while (r.next()) {
-            Object A[] = new Object[8];
-            A[0] = r.getString("NOMBRE");
-            A[1] = r.getInt("EDAD");
-            A[2] = r.getString("SEXO");
-            A[3] = r.getString("ESTADO");
-            A[4] = r.getString("ESPECIE");
-            A[5] = r.getString("VETERINARIO");
-            A[6] = r.getString("HABITAD"); 
-            A[7] = r.getString("ALIMENTACION");
-            m.addRow(A);
+        try (ResultSet r = cs.executeQuery()) {
+            while (r.next()) {
+                Object A[] = new Object[8]; 
+                A[0] = r.getString("NOMBRE");
+                A[1] = r.getInt("EDAD");
+                A[2] = r.getString("SEXO");
+                A[3] = r.getString("ESTADO");
+                A[4] = r.getString("ESPECIE");
+                A[5] = r.getString("VETERINARIO");
+                A[6] = r.getString("HABITAD"); 
+                A[7] = r.getString("ALIMENTACION");
+                m.addRow(A);
+            }
         }
+        
+        conteo(); 
+
     } catch (SQLException ex) {
         System.out.println("Error al filtrar: " + ex.getMessage());
     }
