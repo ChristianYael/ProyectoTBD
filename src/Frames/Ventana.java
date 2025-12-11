@@ -555,27 +555,39 @@ private DefaultTableModel m;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        String nombre = txtNombre.getText();
-        if(nombre.isEmpty()) {
-            showMessageDialog(null, "Selecciona un animal de la tabla o escribe su nombre");
-            return;
-        }
+    String nombre = txtNombre.getText().trim();
+    
+    if(nombre.isEmpty()) {
+        showMessageDialog(this, "Selecciona un animal de la tabla o escribe su nombre.", "Campo Vacío", WARNING_MESSAGE);
+        return;
+    }
 
-        int confirmacion = showConfirmDialog(null, "¿Seguro de eliminar a: " + nombre + "?");
+    int confirmacion = showConfirmDialog(this, 
+            "¿Estás seguro de eliminar a: " + nombre + "?\n Se borrará todo su historial.", 
+            "Confirmar Eliminación", 
+            YES_NO_OPTION, 
+            WARNING_MESSAGE);
 
-        if(confirmacion == YES_OPTION){
-            String sql = "DELETE FROM animales WHERE nombre = ?";
-            try {
-                PreparedStatement pst = Conexion.con.prepareStatement(sql);
-                pst.setString(1, nombre);
-                pst.executeUpdate();
-                showMessageDialog(null, "Eliminado");
-                limpiarCasillas();
-                llenarTabla();
-            } catch (SQLException ex) {
-                 showMessageDialog(null, ex.getMessage());
-            }
+    if(confirmacion == YES_OPTION){
+        
+        String sql = "{call sp_eliminar(?)}";
+        
+        try (java.sql.Connection con = Conexion.getConnection();
+             java.sql.CallableStatement cs = con.prepareCall(sql)) {
+            
+            cs.setString(1, nombre);
+            
+            cs.execute();
+            
+            showMessageDialog(this, "Animal eliminado correctamente.");
+            
+            limpiarCasillas();
+            llenarTabla();
+            
+        } catch (java.sql.SQLException ex) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar:\n" + ex.getMessage(), "Error SQL", JOptionPane.ERROR_MESSAGE);
         }
+    }
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void txtFiltrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtFiltrarActionPerformed
@@ -655,35 +667,48 @@ private DefaultTableModel m;
         llenarTabla(); 
 
     } catch (SQLException ex) {
-        showMessageDialog(this, "Error de Base de Datos:\n" + ex.getMessage(), "Error SQL", ERROR_MESSAGE);
+        showMessageDialog(this, "Error de Base de Datos:\n" + ex.getMessage(), "Error SQL",ERROR_MESSAGE);
     } catch (Exception ex) {
         showMessageDialog(this, "Error inesperado:\n" + ex.getMessage(), "Error", ERROR_MESSAGE);
     }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        String sql = "UPDATE animales SET edad=?, sexo=?, estado=?, especie=?, veterinario=?, habitat=?, alimentacion=? WHERE nombre=?";
-        try {
-            PreparedStatement pst = Conexion.con.prepareStatement(sql);
-            pst.setInt(1, Integer.parseInt(txtEdad.getText()));
-            pst.setString(2, txtSexo.getText());
-            pst.setString(3, txtEstado.getText());
-            pst.setString(4, txtEspecie.getText());
-            pst.setString(5, txtVeterinario.getText());
-            pst.setString(6, txtHabitat.getText());
-            pst.setString(7, txtAlimento.getText());
-            pst.setString(8, txtNombre.getText());
+        int fila = Tabla.getSelectedRow();
+        if (fila == -1) {
+            JOptionPane.showMessageDialog(this, "Selecciona un animal de la tabla.");
+            return;
+        }
 
-            int filas = pst.executeUpdate();
-            if(filas > 0){
-                 showMessageDialog(null, "Registro Actualizado Correctamente");
-                 limpiarCasillas();
-                 llenarTabla();
-            } else {
-                 showMessageDialog(null, "No se encontró el animal para actualizar");
-            }
+        String nombreOriginal = Tabla.getValueAt(fila, 0).toString();
+        
+        String sql = "{call sp_actualizar(?, ?, ?, ?, ?, ?, ?, ?, ?)}";
+
+        try (java.sql.Connection con = Conexion.getConnection();
+             java.sql.CallableStatement cs = con.prepareCall(sql)) {
+
+            int edad = Integer.parseInt(txtEdad.getText());
+
+            cs.setString(1, nombreOriginal);       
+            cs.setString(2, txtNombre.getText());   
+            cs.setInt(3, edad);
+            cs.setString(4, txtSexo.getText());
+            cs.setString(5, txtEstado.getText());
+            cs.setString(6, txtEspecie.getText());      
+            cs.setString(7, txtVeterinario.getText());  
+            cs.setString(8, txtHabitat.getText());      
+            cs.setString(9, txtAlimento.getText());     
+
+            cs.execute();
+
+            JOptionPane.showMessageDialog(this, "Registro actualizado correctamente.");
+            limpiarCasillas();
+            llenarTabla();
+
+        } catch (NumberFormatException nfe) {
+            showMessageDialog(this, "La edad debe ser un número.");
         } catch (SQLException ex) {
-            showMessageDialog(null, ex.getMessage());
+            showMessageDialog(this, "Error SQL: " + ex.getMessage());
         }
     }//GEN-LAST:event_btnActualizarActionPerformed
 
