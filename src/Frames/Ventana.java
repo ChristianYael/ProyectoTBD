@@ -68,9 +68,16 @@ private DefaultTableModel m;
                 A[7] = r.getString("ALIMENTACION");
                 m.addRow(A);
             }
+            conteo();
+            
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }
+    }
+    
+    public void conteo(){
+        int filas = m.getRowCount();
+        lblConteo.setText("Total de animales: " + filas);
     }
     
     public void checkboxver(){
@@ -210,6 +217,7 @@ private DefaultTableModel m;
         ckEspecie = new javax.swing.JCheckBox();
         ckAlimento = new javax.swing.JCheckBox();
         btnBuscar = new javax.swing.JButton();
+        lblConteo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -312,6 +320,11 @@ private DefaultTableModel m;
         txtEstado.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         txtEstado.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtEstado.setBorder(null);
+        txtEstado.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtEstadoFocusLost(evt);
+            }
+        });
         txtEstado.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtEstadoActionPerformed(evt);
@@ -368,6 +381,9 @@ private DefaultTableModel m;
         txtEdad.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtEdadKeyReleased(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtEdadKeyTyped(evt);
             }
         });
         jPanel1.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 190, 30));
@@ -447,6 +463,11 @@ private DefaultTableModel m;
         txtSexo.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         txtSexo.setHorizontalAlignment(javax.swing.JTextField.CENTER);
         txtSexo.setBorder(null);
+        txtSexo.addFocusListener(new java.awt.event.FocusAdapter() {
+            public void focusLost(java.awt.event.FocusEvent evt) {
+                txtSexoFocusLost(evt);
+            }
+        });
         txtSexo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtSexoActionPerformed(evt);
@@ -540,6 +561,10 @@ private DefaultTableModel m;
         });
         jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, 270, 40));
 
+        lblConteo.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
+        lblConteo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        jPanel1.add(lblConteo, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 640, 210, 30));
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -548,7 +573,7 @@ private DefaultTableModel m;
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 661, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
@@ -804,6 +829,36 @@ private DefaultTableModel m;
         }
     }//GEN-LAST:event_txtVeterinarioKeyReleased
 
+    private void txtEstadoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtEstadoFocusLost
+        String texto = txtEstado.getText().trim();
+    
+        if (!texto.equals("ACTIVO") && !texto.equalsIgnoreCase("BAJA")) {
+            txtEstado.setText("");
+            showMessageDialog(null,"Datos incorrectos.\nSolo se aceptan 'ACTIVO' o 'BAJA'");
+        }
+    }//GEN-LAST:event_txtEstadoFocusLost
+
+    private void txtSexoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSexoFocusLost
+        String texto = txtEstado.getText().trim();
+    
+        if (!texto.equals("Macho") && !texto.equalsIgnoreCase("Hembra")) {
+            txtEstado.setText("");
+            showMessageDialog(null,"Datos incorrectos.\nSolo se aceptan 'ACTIVO' o 'BAJA'");
+        }
+    }//GEN-LAST:event_txtSexoFocusLost
+
+    private void txtEdadKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyTyped
+        char c = evt.getKeyChar();
+        
+        if(!Character.isDigit(c)){
+            evt.consume();
+        }
+        
+        if(txtEdad.getText().length() >= 3){
+            evt.consume();
+        }
+    }//GEN-LAST:event_txtEdadKeyTyped
+
     /**
      * @param args the command line arguments
      */
@@ -865,6 +920,7 @@ private DefaultTableModel m;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblConteo;
     private javax.swing.JTextField txtAlimento;
     private javax.swing.JTextField txtEdad;
     private javax.swing.JTextField txtEspecie;
