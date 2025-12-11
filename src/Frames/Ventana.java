@@ -17,6 +17,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.*;
+import table.TableCustom;
 
 
 public class Ventana extends javax.swing.JFrame {
@@ -255,6 +256,7 @@ private DefaultTableModel m;
         jLabel4.setText("Habitat");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 200, -1, 30));
 
+        Tabla.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {},
@@ -266,6 +268,7 @@ private DefaultTableModel m;
 
             }
         ));
+        Tabla.setRowHeight(40);
         jScrollPane1.setViewportView(Tabla);
 
         jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 450, 980, 310));
@@ -858,10 +861,10 @@ private DefaultTableModel m;
     }//GEN-LAST:event_txtEstadoFocusLost
 
     private void txtSexoFocusLost(java.awt.event.FocusEvent evt) {//GEN-FIRST:event_txtSexoFocusLost
-        String texto = txtEstado.getText().trim();
+        String texto = txtSexo.getText().trim();
     
         if (!texto.equals("Macho") && !texto.equalsIgnoreCase("Hembra")) {
-            txtEstado.setText("");
+            txtSexo.setText("");
             showMessageDialog(null,"Datos incorrectos.\nSolo se aceptan 'ACTIVO' o 'BAJA'");
         }
     }//GEN-LAST:event_txtSexoFocusLost
