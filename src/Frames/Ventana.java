@@ -637,7 +637,6 @@ private DefaultTableModel m;
             habitad, 
             alimento
         );
-        // Opcional: Mostrar un mensaje de éxito
         JOptionPane.showMessageDialog(this, "Registro guardado exitosamente.");
         } catch (NumberFormatException e) {
         // Manejar el error si el usuario no ingresa un número válido en 'Edad'

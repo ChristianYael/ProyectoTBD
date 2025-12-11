@@ -24,8 +24,9 @@ public class SQL {
             "inner join Habitats h on h.IDHabitat=a.IDHabitat\n" +
             "inner join Alimentaciones m on m.IDAnimal=a.IDAnimal\n" +
             "inner join Alimentos o on o.IDAlimento=m.IDAlimento";
+    
     public void Insertar(String nombre, int edad, String sexo, String estado,
-                               String nombreComun, String veterinario, String habitad, String alimento) {
+                               String nombreComun, String veterinario, String habitat, String alimento) {
         String sql = "{ call sp_insertar(?, ?, ?, ?, ?, ?, ?, ?) }";
         try (Connection conn = Conexion.getConnection(); 
              CallableStatement cstmt = conn.prepareCall(sql)) { 
@@ -35,9 +36,9 @@ public class SQL {
             cstmt.setString(4, estado);
             cstmt.setString(5, nombreComun);
             cstmt.setString(6, veterinario);
-            cstmt.setString(7, habitad);
+            cstmt.setString(7, habitat);
             cstmt.setString(8, alimento);
-            cstmt.execute();
+            cstmt.executeUpdate();
             System.out.println("Procedimiento ejecutado para: " + nombre);
         } catch (SQLException e) {
             System.err.println("Error al insertar " + nombre + ": " + e.getMessage());
