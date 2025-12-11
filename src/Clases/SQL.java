@@ -24,7 +24,7 @@ public class SQL {
             "inner join Habitats h on h.IDHabitat=a.IDHabitat\n" +
             "inner join Alimentaciones m on m.IDAnimal=a.IDAnimal\n" +
             "inner join Alimentos o on o.IDAlimento=m.IDAlimento";
-    public void insertarAnimal(String nombre, int edad, String sexo, String estado,
+    public void Insertar(String nombre, int edad, String sexo, String estado,
                                String nombreComun, String veterinario, String habitad, String alimento) {
         String sql = "{ call sp_insertar(?, ?, ?, ?, ?, ?, ?, ?) }";
         try (Connection conn = Conexion.getConnection(); 
