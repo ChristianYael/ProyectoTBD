@@ -615,35 +615,49 @@ private DefaultTableModel m;
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-    SQL insert =new SQL();
+    if (txtNombre.getText().trim().isEmpty() || txtEdad.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor, llena al menos el Nombre y la Edad.", "Campos vacíos", WARNING_MESSAGE);
+        return;
+    }
+
+    int edad;
     try {
-        String nombre = txtNombre.getText();
-        int edad = Integer.parseInt(txtEdad.getText()); 
-        String sexo = txtSexo.getText();
-        String estado = txtEstado.getText(); 
-        String nombreComun = txtEspecie.getText(); 
-        String veterinario = txtVeterinario.getText();
-        String habitad = txtHabitat.getText();
-        String alimento = txtAlimento.getText();
+        edad = Integer.parseInt(txtEdad.getText());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "La edad debe ser un número válido.", "Error de Formato", ERROR_MESSAGE);
+        return;
+    }
+
+    String sql = "{call sp_insertar(?, ?, ?, ?, ?, ?, ?, ?)}";
+
+
+    try (java.sql.Connection con = Conexion.getConnection();
+         java.sql.CallableStatement cs = con.prepareCall(sql)) {
+
+        if (con == null) {
+            JOptionPane.showMessageDialog(this, "No se pudo establecer conexión con la Base de Datos.", "Error de Conexión", ERROR_MESSAGE);
+            return;
+        }
+        cs.setString(1, txtNombre.getText());
+        cs.setInt(2, edad);
+        cs.setString(3, txtSexo.getText());
+        cs.setString(4, txtEstado.getText());
+        cs.setString(5, txtEspecie.getText());     
+        cs.setString(6, txtVeterinario.getText()); 
+        cs.setString(7, txtHabitat.getText());     
+        cs.setString(8, txtAlimento.getText());   
+
+        cs.execute();
+
+        showMessageDialog(this, "Registro guardado exitosamente.");
         
-        // 3. Llamar al método de inserción
-        insert.Insertar(
-            nombre, 
-            edad, 
-            sexo, 
-            estado, 
-            nombreComun, 
-            veterinario, 
-            habitad, 
-            alimento
-        );
-        JOptionPane.showMessageDialog(this, "Registro guardado exitosamente.");
-        } catch (NumberFormatException e) {
-        // Manejar el error si el usuario no ingresa un número válido en 'Edad'
-        JOptionPane.showMessageDialog(this, "ERROR: La edad debe ser un número válido.", "Error de Formato", JOptionPane.ERROR_MESSAGE);
-    } catch (Exception e) {
-        // Manejar cualquier otro error (incluyendo los de SQL si el método Insertar no los atrapa)
-        JOptionPane.showMessageDialog(this, "ERROR al guardar el registro: " + e.getMessage(), "Error de Base de Datos", JOptionPane.ERROR_MESSAGE);
+        limpiarCasillas();
+        llenarTabla(); 
+
+    } catch (SQLException ex) {
+        showMessageDialog(this, "Error de Base de Datos:\n" + ex.getMessage(), "Error SQL", ERROR_MESSAGE);
+    } catch (Exception ex) {
+        showMessageDialog(this, "Error inesperado:\n" + ex.getMessage(), "Error", ERROR_MESSAGE);
     }
     }//GEN-LAST:event_btnGuardarActionPerformed
 
