@@ -83,6 +83,12 @@ private DefaultTableModel m;
         ckAlimento.setVisible(vercheck);
         ckVeterinario.setVisible(vercheck);
         vercheck = !vercheck;
+        
+        if(!vercheck){
+            llenarTabla();
+        }else{
+            filtrar();
+        }
     }
     
     public void limpiarCasillas(){
@@ -677,19 +683,27 @@ private DefaultTableModel m;
     }//GEN-LAST:event_txtFiltrarKeyReleased
 
     private void txtNombreKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtNombreKeyReleased
-        filtrar();
+        if(ckNombre.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtNombreKeyReleased
 
     private void txtSexoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSexoKeyReleased
-        filtrar();
+        if(ckSexo.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtSexoKeyReleased
 
     private void txtEstadoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEstadoKeyReleased
-        filtrar();
+        if(ckEstado.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtEstadoKeyReleased
 
     private void txtEspecieKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEspecieKeyReleased
-        filtrar();
+        if(ckEspecie.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtEspecieKeyReleased
 
     private void btnBuscarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBuscarActionPerformed
@@ -729,19 +743,27 @@ private DefaultTableModel m;
     }//GEN-LAST:event_ckVeterinarioActionPerformed
 
     private void txtEdadKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtEdadKeyReleased
-        filtrar();
+        if(ckEdad.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtEdadKeyReleased
 
     private void txtHabitatKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtHabitatKeyReleased
-        filtrar();
+        if(ckHabitat.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtHabitatKeyReleased
 
     private void txtAlimentoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtAlimentoKeyReleased
-        filtrar();
+        if(ckAlimento.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtAlimentoKeyReleased
 
     private void txtVeterinarioKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtVeterinarioKeyReleased
-        filtrar();
+        if(ckVeterinario.isVisible()){
+            filtrar();
+        }
     }//GEN-LAST:event_txtVeterinarioKeyReleased
 
     /**
