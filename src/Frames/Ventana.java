@@ -95,46 +95,7 @@ private DefaultTableModel m;
         txtAlimento.setText("");
         txtVeterinario.setText("");
         txtFiltrar.setText("");
-    }
-    
-    private void filtrarTodo() {
-        String nombre = txtNombre.getText().trim().isEmpty() ? null : txtNombre.getText().trim();
-        String especie = txtEspecie.getText().trim().isEmpty() ? null : txtEspecie.getText().trim();
-        String sexo = txtSexo.getText().trim().isEmpty() ? null : txtSexo.getText().trim();
-        String estado = txtEstado.getText().trim().isEmpty() ? null : txtEstado.getText().trim();
-        String general = txtFiltrar.getText().trim().isEmpty() ? null : txtFiltrar.getText().trim();
-
-        String sql = "{call sp_buscar_animales(?, ?, ?, ?, ?)}";
-
-        try {
-            DefaultTableModel m = (DefaultTableModel) Tabla.getModel();
-            m.setRowCount(0);
-
-            CallableStatement cs = Conexion.con.prepareCall(sql);
-            cs.setString(1, nombre);
-            cs.setString(2, especie);
-            cs.setString(3, sexo);
-            cs.setString(4, estado);
-            cs.setString(5, general);
-
-            ResultSet r = cs.executeQuery();
-
-            while (r.next()) {
-                Object A[] = new Object[8];
-                A[0] = r.getString("NOMBRE");
-                A[1] = r.getInt("EDAD");
-                A[2] = r.getString("SEXO");
-                A[3] = r.getString("ESTADO");
-                A[4] = r.getString("ESPECIE");
-                A[5] = r.getString("VETERINARIO");
-                A[6] = r.getString("HABITAT");
-                A[7] = r.getString("ALIMENTACION");
-                m.addRow(A);
-            }
-        } catch (SQLException ex) {
-            System.out.println("Error al filtrar con SP: " + ex.getMessage());
-        }
-    }
+    } 
     
     private void filtrar() {
     String nombre = (ckNombre.isSelected() && !txtNombre.getText().trim().isEmpty()) 
