@@ -546,7 +546,7 @@ private DefaultTableModel m;
         });
         jPanel1.add(ckAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 30, -1, 30));
 
-        btnBuscar.setBackground(new java.awt.Color(160, 160, 160));
+        btnBuscar.setBackground(new java.awt.Color(0, 102, 204));
         btnBuscar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         btnBuscar.setForeground(new java.awt.Color(255, 255, 255));
         btnBuscar.setText("Buscar");
@@ -699,8 +699,21 @@ private DefaultTableModel m;
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
         int fila = Tabla.getSelectedRow();
         if (fila == -1) {
-            JOptionPane.showMessageDialog(this, "Selecciona un animal de la tabla.");
+            showMessageDialog(this, "Selecciona un animal de la tabla para editar.","Ninguna selección",WARNING_MESSAGE);
             return;
+        }
+        
+        if (txtNombre.getText().trim().isEmpty() || 
+            txtEdad.getText().trim().isEmpty() ||
+            txtSexo.getText().trim().isEmpty() ||
+            txtEstado.getText().trim().isEmpty() ||
+            txtEspecie.getText().trim().isEmpty() ||
+            txtVeterinario.getText().trim().isEmpty() ||
+            txtHabitat.getText().trim().isEmpty() ||
+            txtAlimento.getText().trim().isEmpty()) {
+        
+            showMessageDialog(this, "Faltan datos.\nPor favor, asegúrate de llenar TODOS los campos antes de actualizar.", "Campos Vacíos", WARNING_MESSAGE);
+            return; 
         }
 
         String nombreOriginal = Tabla.getValueAt(fila, 0).toString();
@@ -724,7 +737,7 @@ private DefaultTableModel m;
 
             cs.execute();
 
-            JOptionPane.showMessageDialog(this, "Registro actualizado correctamente.");
+            showMessageDialog(this, "Registro actualizado correctamente.");
             limpiarCasillas();
             llenarTabla();
 
