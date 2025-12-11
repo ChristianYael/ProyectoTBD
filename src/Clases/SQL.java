@@ -17,6 +17,6 @@ public class SQL {
             "inner join AtencionVeterinaria c on c.IDAnimal=a.IDAnimal\n" +
             "inner join Empleados ci on ci.IDEmpleado=c.IDEmpleado\n" +
             "inner join Habitats h on h.IDHabitat=a.IDHabitat\n" +
-            "inner join Alimentaciones m on m.IDAnimal=a.IDHabitat\n" +
+            "inner join Alimentaciones m on m.IDAnimal=a.IDAnimal\n" +
             "inner join Alimentos o on o.IDAlimento=m.IDAlimento";
 }
