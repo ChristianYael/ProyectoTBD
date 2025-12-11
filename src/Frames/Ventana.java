@@ -233,23 +233,23 @@ private DefaultTableModel m;
                 btnEliminarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 280, 260, 40));
+        jPanel1.add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 370, 260, 40));
 
         jLabel1.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel1.setText("Sexo");
-        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 110, -1, 30));
+        jPanel1.add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 200, -1, 30));
 
         jLabel2.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel2.setText("Edad");
-        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 70, -1, 30));
+        jPanel1.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(60, 160, -1, 30));
 
         jLabel3.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel3.setText("Especie");
-        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 30, -1, 30));
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 120, -1, 30));
 
         jLabel4.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel4.setText("Habitat");
-        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 70, -1, 30));
+        jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 160, -1, 30));
 
         Tabla.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -264,23 +264,23 @@ private DefaultTableModel m;
         ));
         jScrollPane1.setViewportView(Tabla);
 
-        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 330, 980, 310));
+        jPanel1.add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 420, 980, 310));
 
         jLabel5.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel5.setText("Filtrar");
-        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 280, -1, 40));
+        jPanel1.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 370, -1, 40));
 
         jLabel6.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel6.setText("Alimento");
-        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 30, -1, 30));
+        jPanel1.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 120, -1, 30));
 
         jLabel7.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel7.setText("Nombre");
-        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 30, -1, 30));
+        jPanel1.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, -1, 30));
 
         jLabel8.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel8.setText("Estado");
-        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 110, -1, 30));
+        jPanel1.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(400, 200, -1, 30));
 
         txtFiltrar.setBackground(new java.awt.Color(231, 249, 228));
         txtFiltrar.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -296,7 +296,7 @@ private DefaultTableModel m;
                 txtFiltrarKeyReleased(evt);
             }
         });
-        jPanel1.add(txtFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 280, 260, 40));
+        jPanel1.add(txtFiltrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(760, 370, 260, 40));
 
         txtHabitat.setBackground(new java.awt.Color(231, 249, 228));
         txtHabitat.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -312,7 +312,7 @@ private DefaultTableModel m;
                 txtHabitatKeyReleased(evt);
             }
         });
-        jPanel1.add(txtHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 70, 190, 30));
+        jPanel1.add(txtHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 160, 190, 30));
 
         txtEstado.setBackground(new java.awt.Color(231, 249, 228));
         txtEstado.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -333,7 +333,7 @@ private DefaultTableModel m;
                 txtEstadoKeyReleased(evt);
             }
         });
-        jPanel1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 110, 190, 30));
+        jPanel1.add(txtEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 200, 190, 30));
 
         txtNombre.setBackground(new java.awt.Color(231, 249, 228));
         txtNombre.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -349,7 +349,7 @@ private DefaultTableModel m;
                 txtNombreKeyReleased(evt);
             }
         });
-        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 30, 190, 30));
+        jPanel1.add(txtNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 120, 190, 30));
 
         txtEspecie.setBackground(new java.awt.Color(231, 249, 228));
         txtEspecie.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -365,7 +365,7 @@ private DefaultTableModel m;
                 txtEspecieKeyReleased(evt);
             }
         });
-        jPanel1.add(txtEspecie, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 30, 190, 30));
+        jPanel1.add(txtEspecie, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 120, 190, 30));
 
         txtEdad.setBackground(new java.awt.Color(231, 249, 228));
         txtEdad.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -384,7 +384,7 @@ private DefaultTableModel m;
                 txtEdadKeyTyped(evt);
             }
         });
-        jPanel1.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 70, 190, 30));
+        jPanel1.add(txtEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 160, 190, 30));
 
         txtAlimento.setBackground(new java.awt.Color(231, 249, 228));
         txtAlimento.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -400,7 +400,7 @@ private DefaultTableModel m;
                 txtAlimentoKeyReleased(evt);
             }
         });
-        jPanel1.add(txtAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 30, 190, 30));
+        jPanel1.add(txtAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 120, 190, 30));
 
         txtVeterinario.setBackground(new java.awt.Color(231, 249, 228));
         txtVeterinario.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -416,7 +416,7 @@ private DefaultTableModel m;
                 txtVeterinarioKeyReleased(evt);
             }
         });
-        jPanel1.add(txtVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 70, 190, 30));
+        jPanel1.add(txtVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(830, 160, 190, 30));
 
         btnLimpiar.setBackground(new java.awt.Color(160, 160, 160));
         btnLimpiar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
@@ -429,7 +429,7 @@ private DefaultTableModel m;
                 btnLimpiarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 180, 270, 40));
+        jPanel1.add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 270, 270, 40));
 
         btnGuardar.setBackground(new java.awt.Color(45, 106, 79));
         btnGuardar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
@@ -442,7 +442,7 @@ private DefaultTableModel m;
                 btnGuardarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 180, 260, 40));
+        jPanel1.add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 270, 260, 40));
 
         btnActualizar.setBackground(new java.awt.Color(233, 196, 106));
         btnActualizar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
@@ -455,7 +455,7 @@ private DefaultTableModel m;
                 btnActualizarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 180, 270, 40));
+        jPanel1.add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 270, 270, 40));
 
         txtSexo.setBackground(new java.awt.Color(231, 249, 228));
         txtSexo.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
@@ -476,11 +476,11 @@ private DefaultTableModel m;
                 txtSexoKeyReleased(evt);
             }
         });
-        jPanel1.add(txtSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 110, 190, 30));
+        jPanel1.add(txtSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 200, 190, 30));
 
         jLabel9.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
         jLabel9.setText("Veterinario");
-        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 70, -1, 30));
+        jPanel1.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 160, -1, 30));
 
         ckVeterinario.setMaximumSize(new java.awt.Dimension(25, 25));
         ckVeterinario.addActionListener(new java.awt.event.ActionListener() {
@@ -488,7 +488,7 @@ private DefaultTableModel m;
                 ckVeterinarioActionPerformed(evt);
             }
         });
-        jPanel1.add(ckVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 70, -1, 30));
+        jPanel1.add(ckVeterinario, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 160, -1, 30));
 
         ckNombre.setMaximumSize(new java.awt.Dimension(25, 25));
         ckNombre.addActionListener(new java.awt.event.ActionListener() {
@@ -496,7 +496,7 @@ private DefaultTableModel m;
                 ckNombreActionPerformed(evt);
             }
         });
-        jPanel1.add(ckNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 30, -1, 30));
+        jPanel1.add(ckNombre, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 120, -1, 30));
 
         ckEdad.setMaximumSize(new java.awt.Dimension(25, 25));
         ckEdad.addActionListener(new java.awt.event.ActionListener() {
@@ -504,7 +504,7 @@ private DefaultTableModel m;
                 ckEdadActionPerformed(evt);
             }
         });
-        jPanel1.add(ckEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 70, -1, 30));
+        jPanel1.add(ckEdad, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 160, -1, 30));
 
         ckSexo.setMaximumSize(new java.awt.Dimension(25, 25));
         ckSexo.addActionListener(new java.awt.event.ActionListener() {
@@ -512,7 +512,7 @@ private DefaultTableModel m;
                 ckSexoActionPerformed(evt);
             }
         });
-        jPanel1.add(ckSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 110, -1, 30));
+        jPanel1.add(ckSexo, new org.netbeans.lib.awtextra.AbsoluteConstraints(310, 200, -1, 30));
 
         ckEstado.setMaximumSize(new java.awt.Dimension(25, 25));
         ckEstado.addActionListener(new java.awt.event.ActionListener() {
@@ -520,7 +520,7 @@ private DefaultTableModel m;
                 ckEstadoActionPerformed(evt);
             }
         });
-        jPanel1.add(ckEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 110, -1, 30));
+        jPanel1.add(ckEstado, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 200, -1, 30));
 
         ckHabitat.setMaximumSize(new java.awt.Dimension(25, 25));
         ckHabitat.addActionListener(new java.awt.event.ActionListener() {
@@ -528,7 +528,7 @@ private DefaultTableModel m;
                 ckHabitatActionPerformed(evt);
             }
         });
-        jPanel1.add(ckHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 70, -1, 30));
+        jPanel1.add(ckHabitat, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 160, -1, 30));
 
         ckEspecie.setMaximumSize(new java.awt.Dimension(25, 25));
         ckEspecie.addActionListener(new java.awt.event.ActionListener() {
@@ -536,7 +536,7 @@ private DefaultTableModel m;
                 ckEspecieActionPerformed(evt);
             }
         });
-        jPanel1.add(ckEspecie, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 30, -1, 30));
+        jPanel1.add(ckEspecie, new org.netbeans.lib.awtextra.AbsoluteConstraints(670, 120, -1, 30));
 
         ckAlimento.setMaximumSize(new java.awt.Dimension(25, 25));
         ckAlimento.addActionListener(new java.awt.event.ActionListener() {
@@ -544,7 +544,7 @@ private DefaultTableModel m;
                 ckAlimentoActionPerformed(evt);
             }
         });
-        jPanel1.add(ckAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 30, -1, 30));
+        jPanel1.add(ckAlimento, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 120, -1, 30));
 
         btnBuscar.setBackground(new java.awt.Color(0, 102, 204));
         btnBuscar.setFont(new java.awt.Font("Consolas", 0, 18)); // NOI18N
@@ -557,11 +557,12 @@ private DefaultTableModel m;
                 btnBuscarActionPerformed(evt);
             }
         });
-        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 280, 270, 40));
+        jPanel1.add(btnBuscar, new org.netbeans.lib.awtextra.AbsoluteConstraints(390, 370, 270, 40));
 
         lblConteo.setFont(new java.awt.Font("Consolas", 0, 14)); // NOI18N
         lblConteo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jPanel1.add(lblConteo, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 640, 210, 30));
+        lblConteo.setText("AAA");
+        jPanel1.add(lblConteo, new org.netbeans.lib.awtextra.AbsoluteConstraints(810, 730, 210, 30));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -571,7 +572,7 @@ private DefaultTableModel m;
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 762, Short.MAX_VALUE)
         );
 
         pack();
