@@ -20,7 +20,7 @@ public class Conexion {
     public static Connection getConnection(){
         try {
             con = DriverManager.getConnection(url, user, password);
-            System.out.println("Conexion exitosa");
+            //System.out.println("Conexion exitosa");
         }catch (SQLException ex) {
             System.getLogger(Conexion.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
