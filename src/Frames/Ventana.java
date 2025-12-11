@@ -26,7 +26,13 @@ private DefaultTableModel m;
         initComponents();
         Conexion.getConnection();
         this.setLocationRelativeTo(null);
-        m = (DefaultTableModel) Tabla.getModel();
+        m = new DefaultTableModel() {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false; 
+            }
+        };
+        
         String[] nombresColumnas = {"NOMBRE", "EDAD", "SEXO", "ESTADO", "ESPECIE", "VETERINARIO", "HABITAT","ALIMENTACION"};
         m.setColumnIdentifiers(nombresColumnas);
         Tabla.setModel(m);
@@ -211,6 +217,7 @@ private DefaultTableModel m;
         lblConteo = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setResizable(false);
 
         jPanel1.setBackground(new java.awt.Color(190, 219, 185));
         jPanel1.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
