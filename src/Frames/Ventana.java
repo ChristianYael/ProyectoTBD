@@ -17,8 +17,7 @@ import java.sql.PreparedStatement;
 import java.util.ArrayList;
 import javax.swing.JOptionPane;
 import static javax.swing.JOptionPane.*;
-import table.TableCustom;
-
+import scroll.ScrollBarCustomUI;
 
 public class Ventana extends javax.swing.JFrame {
 private DefaultTableModel m;
@@ -26,6 +25,8 @@ private DefaultTableModel m;
     private boolean vercheck = false;
     public Ventana() {
         initComponents();
+        jScrollPane1.getVerticalScrollBar().setUI(new ScrollBarCustomUI());
+        jScrollPane1.getHorizontalScrollBar().setUI(new ScrollBarCustomUI());
         Conexion.getConnection();
         this.setLocationRelativeTo(null);
         m = new DefaultTableModel() {
